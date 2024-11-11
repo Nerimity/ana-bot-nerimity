@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@nerimity/nerimity.js':
-        specifier: ^1.8.1
-        version: 1.8.1
+        specifier: ^1.8.4
+        version: 1.8.4
       '@prisma/client':
         specifier: ^5.16.0
         version: 5.17.0(prisma@5.17.0)
@@ -27,8 +27,8 @@ importers:
 
 packages:
 
-  '@nerimity/nerimity.js@1.8.1':
-    resolution: {integrity: sha512-e7qVoovmeEXQXv/1a35h/lzIZXFAtDs36ObxWF9yJnjKf2bz0hCbGJLJXY0tJ/GfxAPbQgvwTfhg+LJQrCa2tg==}
+  '@nerimity/nerimity.js@1.8.4':
+    resolution: {integrity: sha512-R3cG3Ap5PB0adCeVKCWyuwkYrfz7j4XMlZjNeE0PPLiYMfenK4pSn4o94GW/1ejvAlP/d9BGxIien8ezh1UjZQ==}
 
   '@prisma/client@5.17.0':
     resolution: {integrity: sha512-N2tnyKayT0Zf7mHjwEyE8iG7FwTmXDHFZ1GnNhQp0pJUObsuel4ZZ1XwfuAYkq5mRIiC/Kot0kt0tGCfLJ70Jw==}
@@ -193,17 +193,30 @@ packages:
       utf-8-validate:
         optional: true
 
+  ws@8.18.0:
+    resolution: {integrity: sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
   xmlhttprequest-ssl@2.0.0:
     resolution: {integrity: sha512-QKxVRxiRACQcVuQEYFsI1hhkrMlrXHPegbbd1yn9UHOmRxY+si12nQYzri3vbzt8VdTTRviqcKxcyllFas5z2A==}
     engines: {node: '>=0.4.0'}
 
 snapshots:
 
-  '@nerimity/nerimity.js@1.8.1':
+  '@nerimity/nerimity.js@1.8.4':
     dependencies:
       eventemitter3: 5.0.1
       node-fetch: 2.7.0
       socket.io-client: 4.7.5
+      ws: 8.18.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -369,5 +382,7 @@ snapshots:
       webidl-conversions: 3.0.1
 
   ws@8.17.1: {}
+
+  ws@8.18.0: {}
 
   xmlhttprequest-ssl@2.0.0: {}
