@@ -27,8 +27,7 @@ bot.on("ready", () => {
   }
 });
 
-const PREFIX = config.prefix || "!";
-const cmd = (command) => PREFIX + command;
+
 
 bot.on("messageCreate", async (message) => {
   if (message.user.bot) return;
@@ -38,11 +37,11 @@ bot.on("messageCreate", async (message) => {
 
   const args = message.content?.split?.(" ") || [];
 
-  const isCommandMessage = message.content.startsWith(cmd(""));
+  const isCommandMessage = message.command;
 
   if (isCommandMessage) {
     const commandModule = commands.find(
-      (c) => cmd(c.command).toLowerCase() === args[0].toLowerCase()
+      (c) => c.command === message.command.name
     );
     if (commandModule) {
       return commandModule.run(bot, args, message);
@@ -52,18 +51,18 @@ bot.on("messageCreate", async (message) => {
     command.onMessage?.(bot, message);
   });
 
-  if (args[0] === cmd("globalLeaderBoard")) {
+  if (message.command.name === globalLeaderBoard) {
     return leaderBoardCmd(message, true);
   }
 
-  if (args[0] === cmd("leaderBoard")) {
+  if (message.command.name === leaderBoard) {
     return leaderBoardCmd(message);
   }
 
-  if (args[0] === cmd("profile")) {
+  if (message.command.name === profile) {
     return profileCmd(message, "server");
   }
-  if (args[0] === cmd("globalProfile")) {
+  if (message.command.name === globalProfile) {
     return profileCmd(message, "user");
   }
 });
