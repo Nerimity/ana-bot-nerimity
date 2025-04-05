@@ -51,18 +51,18 @@ bot.on("messageCreate", async (message) => {
     command.onMessage?.(bot, message);
   });
 
-  if (message.command.name === globalLeaderBoard) {
+  if (message.command.name === "globalLeaderBoard") {
     return leaderBoardCmd(message, true);
   }
 
-  if (message.command.name === leaderBoard) {
+  if (message.command.name === "leaderBoard") {
     return leaderBoardCmd(message);
   }
 
-  if (message.command.name === profile) {
+  if (message.command.name === "profile") {
     return profileCmd(message, "server");
   }
-  if (message.command.name === globalProfile) {
+  if (message.command.name === "globalProfile") {
     return profileCmd(message, "user");
   }
 });
@@ -84,7 +84,7 @@ bot.on("messageButtonClick", (button) => {
 const leaderBoardCmd = async (message, global = false) => {
   if (global) {
     const users = await getGlobalLeaderBoard();
-    message.reply("", {
+    message.reply(undefined, {
       htmlEmbed: htmlLeaderBoardBuilder(
         users.map((user) => ({
           username: user.username,
@@ -95,7 +95,7 @@ const leaderBoardCmd = async (message, global = false) => {
     });
   } else {
     const servers = await getServerLeaderBoard(message.channel.serverId);
-    message.reply("", {
+    message.reply(undefined, {
       htmlEmbed: htmlLeaderBoardBuilder(
         servers.map((server) => ({
           username: server.user.username,
@@ -129,7 +129,7 @@ const profileCmd = async (message, profile) => {
     return;
   }
 
-  message.reply("", {
+  message.reply(undefined, {
     htmlEmbed: htmlProfileBuilder(server, user, profile),
   });
 };

@@ -2,6 +2,7 @@ import { getGroqChatCompletion } from "../groq.js";
 
 export const command = "ai";
 export const description = "Talk to ana.";
+export const args = "<message>";
 
 /**
  * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message

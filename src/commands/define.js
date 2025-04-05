@@ -1,6 +1,7 @@
 import { define } from "../dictionary.js";
 export const command = "define";
 export const description = "Get the definition of a word.";
+export const args = "<word>";
 
 /**
  * @param {string[]} args
