@@ -51,19 +51,21 @@ bot.on("messageCreate", async (message) => {
     command.onMessage?.(bot, message);
   });
 
-  if (message.command.name === "globalLeaderBoard") {
-    return leaderBoardCmd(message, true);
-  }
-
-  if (message.command.name === "leaderBoard") {
-    return leaderBoardCmd(message);
-  }
-
-  if (message.command.name === "profile") {
-    return profileCmd(message, "server");
-  }
-  if (message.command.name === "globalProfile") {
-    return profileCmd(message, "user");
+  if (isCommandMessage) {
+    if (message.command.name === "globalLeaderBoard") {
+      return leaderBoardCmd(message, true);
+    }
+  
+    if (message.command.name === "leaderBoard") {
+      return leaderBoardCmd(message);
+    }
+  
+    if (message.command.name === "profile") {
+      return profileCmd(message, "server");
+    }
+    if (message.command.name === "globalProfile") {
+      return profileCmd(message, "user");
+    }
   }
 });
 

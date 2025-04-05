@@ -1,6 +1,6 @@
 export const command = "wordle";
 export const description = "Multiplayer Wordle game!";
-export const args = "<4-7>";
+export const args = "start <4-7>";
 import fs from "fs/promises";
 import { addXp } from "../db.js";
 import { define } from "../dictionary.js";
