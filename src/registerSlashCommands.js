@@ -30,7 +30,6 @@ const oldCommands = [
   }
 ]
 
-
 client.updateCommands(config.token, [
   ...commands.map(command => ({
     name: command.command,
@@ -38,7 +37,11 @@ client.updateCommands(config.token, [
     ...(command.args ? {args: command.args} : {})
   })), 
   ...oldCommands
-]).then(() => {
+]).then((res) => {
+  if (!res?.status) {
+    console.log(res);
+    process.exit(1);
+  }
   console.log("Commands registered!")
   process.exit(0);
 });
