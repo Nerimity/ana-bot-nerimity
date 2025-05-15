@@ -116,7 +116,7 @@ const leaderBoardCmd = async (message, global = false) => {
  */
 const profileCmd = async (message, profile) => {
   const args = message.content.split(" ");
-  const userId = args[1] || message.user.id;
+  const userId = message.mentions[0]?.id || args[1] || message.user.id;
 
   let user = await getUser(userId);
 
