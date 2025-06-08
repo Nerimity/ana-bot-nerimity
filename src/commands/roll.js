@@ -15,5 +15,5 @@ export const run = async (bot, args, message) => {
 
   const rollOutput = roll.roll(argsWithoutFirst.join(" "));
 
-  return message.reply(rollOutput.result)
-};
+  return message.reply(rollOutput.result.toString())
+};  
