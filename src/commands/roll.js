@@ -13,7 +13,11 @@ const roll = new Roll();
 export const run = async (bot, args, message) => {
   const argsWithoutFirst = args.slice(1);
 
-  const rollOutput = roll.roll(argsWithoutFirst.join(" "));
+  try {
+    const rollOutput = roll.roll(argsWithoutFirst.join(" "))
 
-  return message.reply(rollOutput.result.toString())
+    return message.reply(rollOutput.result.toString())
+  } catch (error) {
+    return message.reply(`Invalid dice format.`);
+  }
 };  
