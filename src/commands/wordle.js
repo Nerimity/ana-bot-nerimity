@@ -133,7 +133,7 @@ export const run = async (bot, args, message) => {
   if (subCommand === "start") {
     return startCommand(bot, args, message);
   }
-  channel.send(`To start a game, run /wordle ${args}`)
+  message.channel.send(`To start a game, run /wordle ${args}`)
 };
 
 /**
