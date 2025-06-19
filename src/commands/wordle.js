@@ -123,15 +123,15 @@ const roundMessages = {};
  * @param {import("@nerimity/nerimity.js/build/Client.js").Client} bot
  * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message
  */
-export const run = async (bot, args, message) => {
+export const run = async (bot, _args, message) => {
   /**
    * @type {import("@nerimity/nerimity.js/build/Client.js").Server | undefined} server
    */
   const server = message.channel.server;
   if (!server) return;
-  const subCommand = args[1];
+  const subCommand = _args[1];
   if (subCommand === "start") {
-    return startCommand(bot, args, message);
+    return startCommand(bot, _args, message);
   }
   message.channel.send(`To start a game, run /wordle ${args}`)
 };
