@@ -15,13 +15,12 @@ export async function getGroqChatCompletion(message) {
         content: message,
       },
     ],
-    model: "llama3-70b-8192",
+    model: "llama-3.3-70b-versatile",
   });
 
   const content = res.choices[0]?.message?.content || "";
   if (content >= 1999) {
     return content.slice(0, 1996) + "...";
   }
-  return content
-
+  return content;
 }
