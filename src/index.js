@@ -17,7 +17,9 @@ const bot = new Client({
 await setupCommands();
 
 bot.on("ready", () => {
-  console.log(`Logged in as ${bot.user.username}!`);
+  console.log(
+    `Logged in as ${bot.user.username}, in ${bot.servers.cache.size} servers.`
+  );
   if (!config.dev) {
     bot.user.setActivity({
       action: "Playing",
@@ -26,8 +28,6 @@ bot.on("ready", () => {
     });
   }
 });
-
-
 
 bot.on("messageCreate", async (message) => {
   if (message.user.bot) return;
@@ -55,11 +55,11 @@ bot.on("messageCreate", async (message) => {
     if (message.command.name === "globalLeaderBoard") {
       return leaderBoardCmd(message, true);
     }
-  
+
     if (message.command.name === "leaderBoard") {
       return leaderBoardCmd(message);
     }
-  
+
     if (message.command.name === "profile") {
       return profileCmd(message, "server");
     }
