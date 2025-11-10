@@ -2,7 +2,7 @@ import { RolePermissions } from "@nerimity/nerimity.js";
 
 export const command = "ban";
 export const description = "Ban a user.";
-export const args = "<User | userId> <reason>?";
+export const args = "<UserMention> <reason>?";
 export const permissions = RolePermissions.BAN;
 
 /**
