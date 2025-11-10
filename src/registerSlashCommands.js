@@ -1,47 +1,45 @@
 import { Client } from "@nerimity/nerimity.js";
 import { commands, setupCommands } from "./commands.js";
 import config from "./config.js";
-await setupCommands()
-
+await setupCommands();
 
 const client = new Client();
-
-
-
 
 const oldCommands = [
   {
     name: "globalLeaderBoard",
-    description: "Global Leaderboard."
+    description: "Global Leaderboard.",
   },
   {
     name: "leaderBoard",
-    description: "Leaderboard of a server."
+    description: "Leaderboard of a server.",
   },
   {
     name: "profile",
     description: "Server Profile of a user.",
-    args: "<UserMention>"
+    args: "<UserMention>",
   },
   {
     name: "globalProfile",
     description: "Global profile of a user.",
-    args: "<UserMention>"
-  }
-]
-
-client.updateCommands(config.token, [
-  ...commands.map(command => ({
-    name: command.command,
-    description: command.description,
-    ...(command.args ? {args: command.args} : {})
-  })), 
-  ...oldCommands
-]).then((res) => {
-  if (!res?.status) {
-    console.log(res);
-    process.exit(1);
-  }
-  console.log("Commands registered!")
-  process.exit(0);
-});
+    args: "<UserMention>",
+  },
+];
+client
+  .updateCommands(config.token, [
+    ...commands.map((command) => ({
+      name: command.command,
+      description: command.description,
+      ...(command.args ? { args: command.args } : {}),
+      ...(command.permissions ? { permissions: command.permissions } : {}),
+    })),
+    ...oldCommands,
+  ])
+  .then((res) => {
+    if (!res?.status) {
+      console.log(res);
+      process.exit(1);
+    }
+    console.log("Commands registered!");
+    process.exit(0);
+  });
