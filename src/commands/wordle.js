@@ -135,7 +135,7 @@ export const run = async (bot, _args, message) => {
   if (subCommand === "start") {
     return startCommand(bot, _args, message);
   }
-  message.channel.send(`To start a game, type /wordle start 5\nMin: ${minNum} Max: ${maxNum}`);
+  message.channel.send(`To start a game, type \`/wordle start 5\`\nMin: ${minNum} Max: ${maxNum}`);
 };
 
 /**
