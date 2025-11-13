@@ -29,6 +29,8 @@ const wordsObj = {
   6: words6,
   7: words7,
 };
+const maxNum = Object.keys(wordsObj).sort((a, b) => b - a)[0];
+const minNum = Object.keys(wordsObj).sort((a, b) => a - b)[0];
 
 const randomWord = (words) => {
   if (!words) return;
@@ -133,7 +135,7 @@ export const run = async (bot, _args, message) => {
   if (subCommand === "start") {
     return startCommand(bot, _args, message);
   }
-  message.channel.send(`To start a game, type /wordle ${args}`)
+  message.channel.send(`To start a game, type /wordle 5\nMin: ${minNum} Max: ${maxNum}`);
 };
 
 /**
@@ -207,8 +209,7 @@ const startCommand = async (bot, args, message) => {
 
   const word = randomWord(wordsObj[letterWords]);
   if (!word) {
-    const maxNum = Object.keys(wordsObj).sort((a, b) => b - a)[0];
-    const minNum = Object.keys(wordsObj).sort((a, b) => a - b)[0];
+
     return channel.send(
       "Invalid. Please enter a number between " + minNum + " and " + maxNum
     );
