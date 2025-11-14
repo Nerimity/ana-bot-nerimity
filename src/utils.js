@@ -11,6 +11,6 @@ export const replaceUserMentionWithUsername = (text, mentions) => {
       return "@everyone";
     }
     const mention = mentions.find((m) => m.id === userId);
-    return mention ? `@${mention.username}` : match;
+    return mention ? `@${mention.username}` : `@${userId}`;
   });
 };
