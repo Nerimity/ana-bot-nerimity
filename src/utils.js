@@ -26,7 +26,7 @@ export const replaceUserMentionWithUsername = (text, mentions, server) => {
  */
 export const replaceRoleMentionWithUsername = (text, server) => {
   return text.replace(RoleMentionRegex, (match, roleId) => {
-    const mention = server.roles.cache.get(roleId).name;
+    const mention = server?.roles?.cache?.get(roleId)?.name;
     return mention ? `@${mention}` : `@${roleId}`;
   });
 };
