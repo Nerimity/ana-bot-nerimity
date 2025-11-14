@@ -35,7 +35,8 @@ export const onMessage = async (bot, message) => {
 
   const transformedContent = replaceUserMentionWithUsername(
     message.content,
-    message.mentions
+    message.mentions,
+    message.channel.server
   );
 
   const res = await getGroqChatCompletion(transformedContent).catch((err) =>
@@ -45,5 +46,11 @@ export const onMessage = async (bot, message) => {
   if (!res) {
     return message.channel.send("Something went wrong. Check console.");
   }
-  message.channel.send(replaceUserMentionWithUsername(res, message.mentions));
+  message.channel.send(
+    replaceUserMentionWithUsername(
+      res,
+      message.mentions,
+      message.channel.server
+    )
+  );
 };
