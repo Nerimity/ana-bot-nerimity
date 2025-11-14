@@ -22,11 +22,17 @@ export const run = async (bot, args, message) => {
 };
 
 /**
+ * @param {import("@nerimity/nerimity.js/build/Client.js").Client} bot
  * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message
  */
 export const onMessage = async (bot, message) => {
   if (message.user.bot) return;
   if (!message.content) return;
+
+  const anaMentioned = message.mentions.find((m) => m.id == bot.user.id);
+
+  if (!anaMentioned) return;
+
   const transformedContent = replaceUserMentionWithUsername(
     message.content,
     message.mentions
