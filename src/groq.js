@@ -20,7 +20,7 @@ export async function getGroqChatCompletion(message) {
   });
 
   const content = res.choices[0]?.message?.content || "";
-  if (content >= 1999) {
+  if (content.length >= 1999) {
     return content.slice(0, 1996) + "...";
   }
   return content;
