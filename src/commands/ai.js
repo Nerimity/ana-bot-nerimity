@@ -29,7 +29,7 @@ export const onMessage = async (bot, message) => {
   if (message.user.bot) return;
   if (!message.content) return;
 
-  const anaMentioned = message.mentions.find((m) => m.id == bot.user.id);
+  const anaMentioned = message.content.startsWith(`[@:${bot.user.id}]`);
 
   if (!anaMentioned) return;
 
