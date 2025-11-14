@@ -1,4 +1,5 @@
 const UserMentionRegex = /\[@:([0-9a-zA-Z]+)\]/g;
+const RoleMentionRegex = /\[r:([0-9a-zA-Z]+)\]/g;
 
 /**
  *
@@ -15,5 +16,17 @@ export const replaceUserMentionWithUsername = (text, mentions, server) => {
     const member = server.members.cache.get(userId)?.user?.username;
     const username = mention || member;
     return username ? `@${username}` : `@${userId}`;
+  });
+};
+
+/**
+ *
+ * @param {string} text
+ * @param {import("@nerimity/nerimity.js/build/Client.js").Server} server
+ */
+export const replaceRoleMentionWithUsername = (text, server) => {
+  return text.replace(RoleMentionRegex, (match, roleId) => {
+    const mention = server.roles.cache.get(roleId).name;
+    return mention ? `@${mention}` : `@${roleId}`;
   });
 };

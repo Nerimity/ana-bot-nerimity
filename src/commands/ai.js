@@ -1,5 +1,8 @@
 import { getGroqChatCompletion } from "../groq.js";
-import { replaceUserMentionWithUsername } from "../utils.js";
+import {
+  replaceRoleMentionWithUsername,
+  replaceUserMentionWithUsername,
+} from "../utils.js";
 
 export const command = "ai";
 export const description = "Talk to ana.";
@@ -33,9 +36,14 @@ export const onMessage = async (bot, message) => {
 
   if (!anaMentioned) return;
 
-  const transformedContent = replaceUserMentionWithUsername(
+  let transformedContent = replaceUserMentionWithUsername(
     message.content,
     message.mentions,
+    message.channel.server
+  );
+
+  transformedContent = replaceRoleMentionWithUsername(
+    transformedContent,
     message.channel.server
   );
 
@@ -47,10 +55,12 @@ export const onMessage = async (bot, message) => {
     return message.channel.send("Something went wrong. Check console.");
   }
   message.channel.send(
-    replaceUserMentionWithUsername(
-      res,
-      message.mentions,
-      message.channel.server
+    replaceRoleMentionWithUsername(
+      replaceUserMentionWithUsername(
+        res,
+        message.mentions,
+        message.channel.server
+      )
     )
   );
 };
