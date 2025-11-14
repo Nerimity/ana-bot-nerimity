@@ -8,7 +8,8 @@ export async function getGroqChatCompletion(message) {
     messages: [
       {
         role: "system",
-        content: "Try to respond shorter than 800 letters.",
+        content:
+          "Try to respond shorter than 800 letters. Your name is ana, from the video game overwatch.",
       },
       {
         role: "user",

@@ -45,5 +45,5 @@ export const onMessage = async (bot, message) => {
   if (!res) {
     return message.channel.send("Something went wrong. Check console.");
   }
-  message.channel.send(res);
+  message.channel.send(replaceUserMentionWithUsername(res, message.mentions));
 };
