@@ -135,7 +135,9 @@ export const run = async (bot, _args, message) => {
   if (subCommand === "start") {
     return startCommand(bot, _args, message);
   }
-  message.channel.send(`To start a game, type \`/wordle start 5\`\nMin: ${minNum} Max: ${maxNum}`);
+  message.channel.send(
+    `To start a game, type \`/wordle start 5\`\nMin: ${minNum} Max: ${maxNum}`
+  );
 };
 
 /**
@@ -143,7 +145,9 @@ export const run = async (bot, _args, message) => {
  */
 export const onMessage = async (bot, message) => {
   if (message.user.bot) return;
+  console.log("debug yay");
   const lobby = { ...lobbies[message.channel.serverId] };
+  console.log("debug yay", lobby, message.channel.serverId);
   if (!lobby) return;
   const channel = message.channel;
   if (!channel.name.toLowerCase().includes("wordle")) {
@@ -209,7 +213,6 @@ const startCommand = async (bot, args, message) => {
 
   const word = randomWord(wordsObj[letterWords]);
   if (!word) {
-
     return channel.send(
       "Invalid. Please enter a number between " + minNum + " and " + maxNum
     );
