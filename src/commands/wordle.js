@@ -145,9 +145,7 @@ export const run = async (bot, _args, message) => {
  */
 export const onMessage = async (bot, message) => {
   if (message.user.bot) return;
-  console.log("debug yay");
   const lobby = { ...lobbies[message.channel.serverId] };
-  console.log("debug yay", lobby, message.channel.serverId);
   if (!lobby) return;
   const channel = message.channel;
   if (!channel.name.toLowerCase().includes("wordle")) {
@@ -166,7 +164,9 @@ export const onMessage = async (bot, message) => {
 
   if (!isValidWord) return;
   const res = await message.delete().catch(() => {
-    console.log("Missing permission: Delete message.");
+    console.log("Missing permission: Delete message. Stopping game.");
+    delete lobbies[message.channel.serverId];
+    message.channel.send("Missing permission: Delete message. Stopping game.");
     return false;
   });
   if (res === false) return;
