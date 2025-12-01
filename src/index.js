@@ -14,7 +14,7 @@ import { commands, setupCommands } from "./commands.js";
 const bot = new Client({
   urlOverride: config.urlOverride,
 });
-await setupCommands();
+await setupCommands(bot);
 
 bot.on("ready", () => {
   console.log(
@@ -66,15 +66,6 @@ bot.on("messageCreate", async (message) => {
     if (message.command.name === "globalProfile") {
       return profileCmd(message, "user");
     }
-  }
-});
-
-bot.on("messageButtonClick", (button) => {
-  if (button.id === "clickMeButton") {
-    button.respond({
-      title: "Hey!",
-      content: `Hey there **${button.user?.username}**!`,
-    });
   }
 });
 
