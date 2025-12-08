@@ -1,4 +1,5 @@
 import { ServerChannel } from "@nerimity/nerimity.js";
+import { match } from "assert";
 
 export const command = "bossFight";
 export const description = "Boss fight test.";
@@ -82,11 +83,13 @@ class Match {
   }
   attack(playerName, damage) {
     this.bossHealth -= damage;
+    if (this.bossHealth < 0) {
+      this.bossHealth = 0;
+    }
     this.attackHistory.push(`${playerName} - ${damage} ATT`);
     if (this.attackHistory.length > 5) {
       this.attackHistory.shift();
     }
-
     this.message.edit(undefined, { htmlEmbed: this.html() });
   }
 }
@@ -150,6 +153,9 @@ export const onLoad = async (bot) => {
         if (match.channel.id !== button.channel.id) return;
         if (match.message?.id !== button.messageId) return;
         match.attack(member.user.username, attack.damage);
+        if (match.bossHealth === 0) {
+          matches.delete(button.channel.serverId);
+        }
 
         return;
       }
