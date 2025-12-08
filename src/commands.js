@@ -18,6 +18,7 @@ export const setupCommands = async (bot) => {
     commandFiles.map((file) => import(`./commands/${file}`))
   );
   commands.forEach((command) => {
+    if (!bot) return;
     command.onLoad?.(bot);
   });
 };

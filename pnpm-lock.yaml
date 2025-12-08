@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@nerimity/nerimity.js':
-        specifier: ^1.16.1
-        version: 1.16.1
+        specifier: ^1.16.3
+        version: 1.16.3
       '@prisma/client':
         specifier: ^5.16.0
         version: 5.17.0(prisma@5.17.0)
@@ -30,8 +30,8 @@ importers:
 
 packages:
 
-  '@nerimity/nerimity.js@1.16.1':
-    resolution: {integrity: sha512-G60yAyvUNBKOgWfNfaygd/yACETvSJKw9E/kC6X0X8tA6DvYv/KnWgZ+tLldmydrbckUurWTIZim62QMUKvV+g==}
+  '@nerimity/nerimity.js@1.16.3':
+    resolution: {integrity: sha512-XEApRqiLjnKEEtPf1wf29RlvkiEgy1tP2DGZfdEMeIiThqqXU/ARw+kfbVP7iJnF7vodIrowq5q8S4RUXphavg==}
 
   '@prisma/client@5.17.0':
     resolution: {integrity: sha512-N2tnyKayT0Zf7mHjwEyE8iG7FwTmXDHFZ1GnNhQp0pJUObsuel4ZZ1XwfuAYkq5mRIiC/Kot0kt0tGCfLJ70Jw==}
@@ -225,7 +225,7 @@ packages:
 
 snapshots:
 
-  '@nerimity/nerimity.js@1.16.1':
+  '@nerimity/nerimity.js@1.16.3':
     dependencies:
       eventemitter3: 5.0.1
       node-fetch: 2.7.0

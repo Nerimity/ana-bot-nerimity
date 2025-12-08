@@ -15,6 +15,7 @@ export const run = async (bot, args, message) => {
  */
 export const onLoad = async (bot) => {
   bot.on("messageButtonClick", (button) => {
+    if (button.id !== "clickMeButton") return;
     if (button.type === "modal_click") {
       const server = button.channel.server;
       const userId = button.user.id;
