@@ -101,10 +101,8 @@ export const run = async (bot, args, message) => {
   if (!(message.channel instanceof ServerChannel)) {
     return;
   }
-  if (
-    !message.channel.name.includes("bot") &&
-    !message.channel.name.includes("commands")
-  ) {
+  const channelName = message.channel.name.toLowerCase();
+  if (!channelName.includes("bot") && !channelName.includes("commands")) {
     return message.reply(
       "This command can only be used in a channel named 'bot' or 'commands'."
     );
