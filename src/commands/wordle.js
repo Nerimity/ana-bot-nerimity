@@ -7,6 +7,7 @@ import { define } from "../dictionary.js";
 
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { User } from "@nerimity/nerimity.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -58,9 +59,12 @@ const matchedWords = (word, guess) => {
     }
   }
 
+  let correctPositions = [];
+
   for (let i = 0; i < word.length; i++) {
     if (word[i] === guess[i]) {
       str += `<div class="g">${guess[i].toUpperCase()}</div>`;
+      correctPositions.push(i);
     } else if (word.includes(guess[i])) {
       const count = orangeCharCount[guess[i]];
       if (!count) {
@@ -74,7 +78,7 @@ const matchedWords = (word, guess) => {
     }
   }
 
-  return `
+  const html = `
    <span>
           ${str}
         </span>
@@ -105,13 +109,27 @@ const matchedWords = (word, guess) => {
               }
         </style>
   `;
+
+  return {
+    html,
+    correctPositions,
+  };
 };
 
+const WINNER_XP = 100;
+const POSITION_XP = 5;
+const PARTICIPANT_XP = 5;
+
 /**
+ *
+ * claimed positions: <position, User>
+ * participants: <User>
  * @type {Record<string, {
  *   word: string
  *   length: number
  *   messages: import("@nerimity/nerimity.js/build/Client.js").Message[]
+ *   participants: Set<User>
+ *   claimedPositions: Map<number, User>
  * }>}
  */
 const lobbies = {};
@@ -171,8 +189,17 @@ export const onMessage = async (bot, message) => {
   });
   if (res === false) return;
 
-  let msg = await channel.send("* *", {
-    htmlEmbed: matchedWords(lobby.word, letterWord),
+  lobby.participants.add(message.user);
+
+  const { html, correctPositions } = matchedWords(lobby.word, message.content);
+
+  correctPositions.forEach((pos) => {
+    if (lobby.claimedPositions.has(pos)) return;
+    lobby.claimedPositions.set(pos, message.user);
+  });
+
+  let msg = await channel.send(undefined, {
+    htmlEmbed: html,
     silent: true,
   });
   if (!hasWon) {
@@ -180,13 +207,67 @@ export const onMessage = async (bot, message) => {
   }
   if (hasWon) {
     roundMessages[channel.serverId].at(-1).push(...lobby.messages);
-    msg = await msg.edit(msg.content + `\n${message.user} won! (+50xp)`);
+
+    let xpMessage = `Winning ${WINNER_XP}XP: (${message.user})\n`;
+
     await addXp(
       message.user.id,
       message.channel.serverId,
       message.user.username,
-      50
+      WINNER_XP
     );
+
+    if (lobby.claimedPositions.size) {
+      const userScores = new Map();
+      for (const [pos, user] of lobby.claimedPositions) {
+        userScores.set(user, (userScores.get(user) || 0) + 1);
+      }
+
+      /**
+       * @type {Record<number, User[]>}
+       */
+      const scoreGroups = new Map();
+      for (const [user, score] of userScores.entries()) {
+        if (!scoreGroups.has(score)) {
+          scoreGroups.set(score, []);
+        }
+        scoreGroups.get(score).push(user);
+      }
+
+      xpMessage += "\nCorrect positions:\n";
+      for (const [score, users] of scoreGroups.entries()) {
+        users.forEach((user) => {
+          addXp(
+            user.id,
+            message.channel.serverId,
+            user.username,
+            score * POSITION_XP
+          ).then(() => {});
+        });
+
+        xpMessage += `${score}: ${score * POSITION_XP}XP (${users
+          .map((user) => user)
+          .join(", ")})\n`;
+      }
+    }
+
+    if (lobby.participants.size) {
+      const participants = Array.from(lobby.participants);
+      participants.forEach((user) => {
+        addXp(
+          user.id,
+          message.channel.serverId,
+          user.username,
+          PARTICIPANT_XP
+        ).then(() => {});
+      });
+      xpMessage += `\nParticipant ${PARTICIPANT_XP}XP:  (${participants
+        .map((user) => user)
+        .join(", ")})\n`;
+    }
+
+    msg = await msg.edit(msg.content + `${xpMessage}`);
+
     const definition = await define(letterWord);
     if (definition) {
       await msg.edit(msg.content + `\n\n${letterWord}: ` + definition);
@@ -196,7 +277,7 @@ export const onMessage = async (bot, message) => {
 
 /**
  * @param {import("@nerimity/nerimity.js/build/Client.js").Client} bot
- * @param {import("@nerimity/nerimiwwwty.js/build/Client.js").Message} message
+ * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message
  */
 const startCommand = async (bot, args, message) => {
   const channel = message.channel;
@@ -223,6 +304,8 @@ const startCommand = async (bot, args, message) => {
     word,
     length: letterWords,
     messages: [],
+    claimedPositions: new Map(),
+    participants: new Set(),
   };
   channel.send("Game Started! (" + letterWords + " letters)");
 };

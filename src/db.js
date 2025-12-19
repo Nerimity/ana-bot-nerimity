@@ -86,35 +86,29 @@ export const addXp = async (userId, serverId, username, customXp) => {
 
   let server = await getServer(serverId, userId);
 
-  if (!user) {
-    user = await createUser(userId, username);
-  }
-  if (!server) {
-    server = await createServer(userId, serverId);
-  }
+  if (!user) user = await createUser(userId, username);
+  if (!server) server = await createServer(userId, serverId);
 
-  let globalBonusXp = 0;
-  const globalRequiredXp = calculateRequiredXp(user.level);
-  const globalXPToAdd = customXp || globalBonusXp + 10;
-  const globalXP = user.xp + globalXPToAdd;
-  let newGlobalXp = globalXP;
+  const globalXPToAdd = customXp || 10;
+  let newGlobalXp = user.xp + globalXPToAdd;
   let newGlobalLevel = user.level;
 
-  if (globalXP > globalRequiredXp) {
-    newGlobalXp = newGlobalXp - globalRequiredXp;
+  let globalRequiredXp = calculateRequiredXp(newGlobalLevel);
+  while (newGlobalXp >= globalRequiredXp) {
+    newGlobalXp -= globalRequiredXp;
     newGlobalLevel++;
+    globalRequiredXp = calculateRequiredXp(newGlobalLevel);
   }
 
-  let serverBonusXp = 0;
-  const serverRequiredXp = calculateRequiredXp(server.level);
-  const serverXPToAdd = customXp || serverBonusXp + 10;
-  const serverXP = server.xp + serverXPToAdd;
-  let newServerXp = serverXP;
+  const serverXPToAdd = customXp || 10;
+  let newServerXp = server.xp + serverXPToAdd;
   let newServerLevel = server.level;
 
-  if (serverXP > serverRequiredXp) {
-    newServerXp = newServerXp - serverRequiredXp;
+  let serverRequiredXp = calculateRequiredXp(newServerLevel);
+  while (newServerXp >= serverRequiredXp) {
+    newServerXp -= serverRequiredXp;
     newServerLevel++;
+    serverRequiredXp = calculateRequiredXp(newServerLevel);
   }
 
   await prisma.user.update({
@@ -124,7 +118,6 @@ export const addXp = async (userId, serverId, username, customXp) => {
       level: newGlobalLevel,
       username,
       totalXp: { increment: globalXPToAdd },
-      // lastStreakAt: Date.now(),
       servers: {
         update: {
           where: { id_userId: { id: serverId, userId } },
@@ -132,18 +125,20 @@ export const addXp = async (userId, serverId, username, customXp) => {
             xp: newServerXp,
             level: newServerLevel,
             totalXp: { increment: serverXPToAdd },
-            // lastStreakAt: Date.now()
           },
         },
       },
     },
   });
+
   return {
     globalLevelUp: newGlobalLevel > user.level,
+    globalLevelsGained: newGlobalLevel - user.level,
     globalXp: newGlobalXp,
     globalLevel: newGlobalLevel,
 
     serverLevelUp: newServerLevel > server.level,
+    serverLevelsGained: newServerLevel - server.level,
     serverXp: newServerXp,
     serverLevel: newServerLevel,
   };
