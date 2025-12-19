@@ -14,14 +14,33 @@ export const args = "<message>";
 export const run = async (bot, args, message) => {
   const argsWithoutFirst = args.slice(1);
 
-  const res = await getGroqChatCompletion(argsWithoutFirst.join(" ")).catch(
-    (err) => console.log(err)
+  const content = argsWithoutFirst.join(" ");
+
+  let transformedContent = replaceUserMentionWithUsername(
+    content,
+    message.mentions,
+    message.channel.server
   );
+
+  transformedContent = replaceRoleMentionWithUsername(
+    transformedContent,
+    message.channel.server
+  );
+
+  const res = await getGroqChatCompletion().catch((err) => console.log(err));
 
   if (!res) {
     return message.channel.send("Something went wrong. Check console.");
   }
-  message.channel.send(res);
+  message.channel.send(
+    replaceRoleMentionWithUsername(
+      replaceUserMentionWithUsername(
+        res,
+        message.mentions,
+        message.channel.server
+      )
+    )
+  );
 };
 
 /**
