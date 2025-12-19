@@ -27,7 +27,9 @@ export const run = async (bot, args, message) => {
     message.channel.server
   );
 
-  const res = await getGroqChatCompletion().catch((err) => console.log(err));
+  const res = await getGroqChatCompletion(transformedContent).catch((err) =>
+    console.log(err)
+  );
 
   if (!res) {
     return message.channel.send("Something went wrong. Check console.");
