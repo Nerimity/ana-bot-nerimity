@@ -173,6 +173,7 @@ export const onMessage = async (bot, message) => {
   if (!isLengthWord) {
     return;
   }
+
   const letterWord = message.content.toLowerCase();
   const isValidWord = wordsObj[lobby.length].includes(letterWord);
   const hasWon = letterWord === lobby.word;
@@ -191,7 +192,7 @@ export const onMessage = async (bot, message) => {
 
   lobby.participants.add(message.user);
 
-  const { html, correctPositions } = matchedWords(lobby.word, message.content);
+  const { html, correctPositions } = matchedWords(lobby.word, letterWord);
 
   correctPositions.forEach((pos) => {
     if (lobby.claimedPositions.has(pos)) return;
