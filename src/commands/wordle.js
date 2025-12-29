@@ -202,6 +202,14 @@ export const onMessage = async (bot, message) => {
   let msg = await channel.send(undefined, {
     htmlEmbed: html,
     silent: true,
+    ...(hasWon
+      ? {
+          buttons: [
+            { id: "wd_again_" + lobby.word.length, label: "Play again" },
+            { id: "wd_rnd", label: "Play Random" },
+          ],
+        }
+      : {}),
   });
   if (!hasWon) {
     lobbies[message.channel.serverId]?.messages.push(msg);
@@ -309,6 +317,33 @@ const startCommand = async (bot, args, message) => {
     participants: new Set(),
   };
   channel.send("Game Started! (" + letterWords + " letters)");
+};
+
+/**
+ * @param {import("@nerimity/nerimity.js/build/Client.js").Client} bot
+ */
+export const onLoad = async (bot) => {
+  bot.on(
+    "messageButtonClick",
+    /**
+     * @param {import("@nerimity/nerimity.js").MessageButton} button
+     */
+    async (button) => {
+      if (button.id.startsWith("wd_again")) {
+        startCommand(bot, [null, null, button.id.split("_")[2]], {
+          channel: button.channel,
+        });
+      }
+      if (button.id === "wd_rnd") {
+        const max = parseInt(maxNum);
+        const min = parseInt(minNum);
+        const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        startCommand(bot, [null, null, randomNumber.toString()], {
+          channel: button.channel,
+        });
+      }
+    }
+  );
 };
 
 setInterval(() => {

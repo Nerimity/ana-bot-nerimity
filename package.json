@@ -11,7 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@nerimity/nerimity.js": "^1.17.0",
+    "@nerimity/nerimity.js": "^1.19.0",
     "@prisma/client": "^5.16.0",
     "@types/node": "^22.5.5",
     "groq-sdk": "^0.7.0",
