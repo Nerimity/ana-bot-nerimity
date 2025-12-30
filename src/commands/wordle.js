@@ -297,7 +297,9 @@ const startCommand = async (bot, args, message) => {
   }
   const isAlreadyStarted = lobbies[channel.serverId];
   if (isAlreadyStarted) {
-    return channel.send("There is already a game in progress.");
+    return channel.send(
+      `There is already a game in progress. Start typing a word. (${isAlreadyStarted.word.length})`
+    );
   }
   const letterWords = parseInt(args[2]) || 5;
 
