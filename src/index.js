@@ -106,8 +106,11 @@ const leaderBoardCmd = async (message, global = false) => {
  * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message - The message object containing the user's command.
  */
 const profileCmd = async (message, profile) => {
-  const args = message.content.split(" ");
+  let args = message.content.split(" ");
+  const raw = args.includes("raw");
+  args = args.filter((a) => a !== "raw");
   const userId = message.mentions[0]?.id || args[1] || message.user.id;
+
 
   let user = await getUser(userId);
 
@@ -123,13 +126,14 @@ const profileCmd = async (message, profile) => {
   }
 
   message.reply(undefined, {
-    htmlEmbed: htmlProfileBuilder(server, user, profile),
+    htmlEmbed: htmlProfileBuilder(server, user, profile, raw),
   });
 };
 /**
  *
  * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message - The message object containing the user's command.
  */
+
 
 /**
  * Builds an HTML profile based on the provided server and user information.
@@ -139,7 +143,41 @@ const profileCmd = async (message, profile) => {
  * @param {"server" | "user"} profile
  * @return {string} The HTML profile.
  */
-const htmlProfileBuilder = (server, user, profile) => {
+const customHtmlProfileBuilder = (server, user, profile) => {
+  const level = profile === "server" ? server.level : user.level;
+  const currentXP = profile === "server" ? server.xp : user.xp;
+  const totalXp = profile === "server" ? server.totalXp : user.totalXp;
+  const xpRequired =
+    profile === "server"
+      ? calculateRequiredXp(server.level)
+      : calculateRequiredXp(user.level);
+  const percent = (currentXP / xpRequired) * 100;
+
+  const username = escapeHtml(user.username);
+
+  return user.customProfileHtml
+    .replaceAll("{level}", level)
+    .replaceAll("{xp}", currentXP)
+    .replaceAll("{xp_required}", xpRequired)
+    .replaceAll("{xp_percent}", percent.toFixed(2))
+    .replaceAll("{xp_total}", totalXp)
+    .replaceAll("{username}", username)
+};
+
+/**
+ * Builds an HTML profile based on the provided server and user information.
+ *
+ * @param {import('@prisma/client').Server} server - The server information.
+ * @param {import('@prisma/client').User} user - The user information.
+ * @param {"server" | "user"} profile
+ * @param {boolean} [raw=false] - Whether to use raw HTML or custom profile HTML.
+ * @return {string} The HTML profile.
+ */
+const htmlProfileBuilder = (server, user, profile, raw) => {
+
+  if (user.customProfileHtml && !raw) {
+    return customHtmlProfileBuilder(server, user, profile);
+  }
   const level = profile === "server" ? server.level : user.level;
   const currentXP = profile === "server" ? server.xp : user.xp;
   const xpRequired =

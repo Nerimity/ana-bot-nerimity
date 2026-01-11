@@ -28,6 +28,7 @@ model User {
   servers Server[]
 
   createdAt DateTime @default(now())
+  customProfileHtml String?
 }
 
 model Server {

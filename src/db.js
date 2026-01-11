@@ -49,6 +49,7 @@ export const getUser = async (userId) => {
  * @param {number} data.level - The new level of the user.
  * @param {number} data.xp - The new XP of the user.
  * @param {string} data.username - The new username of the user.
+ * @param {string} data.customProfileHtml - The new custom profile HTML of the user.
  * @return {Promise<void>} A promise that resolves when the update is complete.
  */
 export const updateUser = async (userId, data) => {

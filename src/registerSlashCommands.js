@@ -17,12 +17,12 @@ const oldCommands = [
   {
     name: "profile",
     description: "Server Profile of a user.",
-    args: "<UserMention>",
+    args: "<UserMention> raw?",
   },
   {
     name: "globalProfile",
     description: "Global profile of a user.",
-    args: "<UserMention>",
+    args: "<UserMention> raw?",
   },
 ];
 client
