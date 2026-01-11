@@ -2,7 +2,7 @@ import { htmlToJson } from "@nerimity/html-embed";
 import { updateUser } from "../db.js";
 export const command = "setProfile";
 export const description = "Set custom html profile";
-export const args = "<html?>";
+export const args = "<clear | html?> ";
 
 /**
  * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message
@@ -24,6 +24,12 @@ export const run = async (bot, args, message) => {
         "`{xp_total}` - Your Total XP\n"
     );
   }
+
+  if (content === "clear") {
+    await updateUser(message.user.id, { customProfileHtml: null });
+    return message.reply("Profile HTML cleared!");
+  }
+
 
   let isInvalid = false;
   try {
