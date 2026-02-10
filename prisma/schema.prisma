@@ -13,21 +13,20 @@ datasource db {
   url      = "file:./db/db.db"
 }
 
-
 model User {
-  id    String @id
+  id       String @id
   username String
 
-  level Int @default(1)
-  xp Int @default(0)
+  level   Int @default(1)
+  xp      Int @default(0)
   totalXp Int @default(0)
 
-  streak Int @default(0)
+  streak       Int      @default(0)
   lastStreakAt DateTime @default(now())
 
   servers Server[]
 
-  createdAt DateTime @default(now())
+  createdAt         DateTime @default(now())
   customProfileHtml String?
 }
 
@@ -38,11 +37,25 @@ model Server {
 
   user User @relation(fields: [userId], references: [id])
 
-  level Int @default(1)
-  xp Int @default(0)
+  level   Int @default(1)
+  xp      Int @default(0)
   totalXp Int @default(0)
 
-  streak Int @default(0)
+  streak       Int      @default(0)
   lastStreakAt DateTime @default(now())
+
   @@unique([id, userId])
+}
+
+model Warning {
+  id       Int    @id @default(autoincrement())
+  userId   String
+  serverId String
+
+  warnedByUserId String
+
+  reason    String
+  createdAt DateTime @default(now())
+
+  @@index([userId, serverId])
 }

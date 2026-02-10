@@ -145,5 +145,32 @@ export const addXp = async (userId, serverId, username, customXp) => {
   };
 };
 
+export const addWarning = async (requesterUserid, userId, serverId, reason) => {
+  const serverWarnCount = await prisma.warning.count({
+    where: {
+      userId,
+      serverId,
+    },
+  });
+  const totalWarnCount = await prisma.warning.count({
+    where: {
+      userId,
+    },
+  });
+  const warning = await prisma.warning.create({
+    data: {
+      userId,
+      serverId,
+      reason,
+      warnedByUserId: requesterUserid,
+    },
+  });
+  return {
+    totalWarnCount: totalWarnCount + 1,
+    serverWarnCount: serverWarnCount + 1,
+    warning,
+  };
+};
+
 export const calculateRequiredXp = (currentLevel) =>
   5 * (currentLevel + 1) ** 2 + 50 * (currentLevel + 1) + 100;
