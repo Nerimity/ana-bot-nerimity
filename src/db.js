@@ -172,5 +172,23 @@ export const addWarning = async (requesterUserid, userId, serverId, reason) => {
   };
 };
 
+export const removeWarning = async (userId, serverId) => {
+  const serverWarnCount = await prisma.warning.findFirst({
+    where: {
+      userId,
+      serverId,
+    },
+  });
+  if (!serverWarnCount) {
+    return false;
+  }
+  prisma.warning.delete({
+    where: {
+      id: serverWarnCount.id,
+    },
+  });
+  return true;
+};
+
 export const calculateRequiredXp = (currentLevel) =>
   5 * (currentLevel + 1) ** 2 + 50 * (currentLevel + 1) + 100;
