@@ -31,7 +31,7 @@ export async function getGroqChatCompletion(message) {
 
 /**
  *
- * @param {({content: string, role: "user" | "assistant"})[]} messages
+ * @param {({content: string, role: "user" | "assistant", name?: string})[]} messages
  * @returns
  */
 export async function getGroqChatCompletionFromMessages(messages) {

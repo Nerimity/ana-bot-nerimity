@@ -87,8 +87,13 @@ export const onMessage = async (bot, message) => {
         m.channel.server,
       );
 
+      const messageByAna = m.user.id === bot.user.id;
+
       return {
-        role: m.user.id === bot.user.id ? "assistant" : "user",
+        role: messageByAna ? "assistant" : "user",
+        ...(!messageByAna
+          ? { name: m.member.nickname || m.user.username }
+          : {}),
         content: transformedContent,
       };
     })
