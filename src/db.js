@@ -182,7 +182,7 @@ export const removeWarning = async (userId, serverId) => {
   if (!serverWarnCount) {
     return false;
   }
-  prisma.warning.delete({
+  await prisma.warning.delete({
     where: {
       id: serverWarnCount.id,
     },
