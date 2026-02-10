@@ -91,9 +91,7 @@ export const onMessage = async (bot, message) => {
 
       return {
         role: messageByAna ? "assistant" : "user",
-        ...(!messageByAna
-          ? { name: m.member.nickname || m.user.username }
-          : {}),
+        ...(!messageByAna ? { name: m.user.username } : {}),
         content: transformedContent,
       };
     })
