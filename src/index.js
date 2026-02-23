@@ -18,13 +18,14 @@ await setupCommands(bot);
 
 bot.on("ready", () => {
   console.log(
-    `Logged in as ${bot.user.username}, in ${bot.servers.cache.size} servers.`
+    `Logged in as ${bot.user.username}, in ${bot.servers.cache.size} servers.`,
   );
   if (!config.dev) {
     bot.user.setActivity({
       action: "Playing",
-      name: "Overwatch 2",
+      name: "Overwatch",
       startedAt: 1468882814000, // ana release date 19 july 2016
+      imgSrc: "https://cdn.nerimity.com/emojis/1585986167172677632.webp",
     });
   }
 });
@@ -41,7 +42,7 @@ bot.on("messageCreate", async (message) => {
 
   if (isCommandMessage) {
     const commandModule = commands.find(
-      (c) => c.command === message.command.name
+      (c) => c.command === message.command.name,
     );
     if (commandModule) {
       return commandModule.run(bot, args, message);
@@ -83,7 +84,7 @@ const leaderBoardCmd = async (message, global = false) => {
           username: user.username,
           totalXP: user.totalXp,
         })),
-        "global"
+        "global",
       ),
     });
   } else {
@@ -94,7 +95,7 @@ const leaderBoardCmd = async (message, global = false) => {
           username: server.user.username,
           totalXP: server.totalXp,
         })),
-        "server"
+        "server",
       ),
     });
   }
@@ -110,7 +111,6 @@ const profileCmd = async (message, profile) => {
   const raw = args.includes("raw");
   args = args.filter((a) => a !== "raw");
   const userId = message.mentions[0]?.id || args[1] || message.user.id;
-
 
   let user = await getUser(userId);
 
@@ -133,7 +133,6 @@ const profileCmd = async (message, profile) => {
  *
  * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message - The message object containing the user's command.
  */
-
 
 /**
  * Builds an HTML profile based on the provided server and user information.
@@ -161,7 +160,7 @@ const customHtmlProfileBuilder = (server, user, profile) => {
     .replaceAll("{xp_required}", xpRequired)
     .replaceAll("{xp_percent}", percent.toFixed(2))
     .replaceAll("{xp_total}", totalXp)
-    .replaceAll("{username}", username)
+    .replaceAll("{username}", username);
 };
 
 /**
@@ -174,7 +173,6 @@ const customHtmlProfileBuilder = (server, user, profile) => {
  * @return {string} The HTML profile.
  */
 const htmlProfileBuilder = (server, user, profile, raw) => {
-
   if (user.customProfileHtml && !raw) {
     return customHtmlProfileBuilder(server, user, profile);
   }
@@ -189,8 +187,8 @@ const htmlProfileBuilder = (server, user, profile, raw) => {
   return `
         <div class="ctn">
             <div class="h">${escapeHtml(user.username)}<div class="sh">(${
-    profile === "server" ? "Server" : "User"
-  } Profile)</div></div>
+              profile === "server" ? "Server" : "User"
+            } Profile)</div></div>
             <div class="t">Level ${level}</div>
             <div class="t">${currentXP}/${xpRequired}</div>
             <div class="b"><div style="width: ${percent}%"></div></div>
@@ -250,7 +248,7 @@ const htmlLeaderBoardBuilder = (users, profile) => {
               .map(
                 (user) => `
                     <div>${escapeHtml(user.username)} ${user.totalXP}XP</div>
-                `
+                `,
               )
               .join("")}
 
