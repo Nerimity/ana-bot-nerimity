@@ -13,7 +13,7 @@ export const replaceUserMentionWithUsername = (text, mentions, server) => {
       return "@everyone";
     }
     const mention = mentions.find((m) => m.id === userId)?.username;
-    const member = server.members.cache.get(userId)?.user?.username;
+    const member = server.members?.cache.get(userId)?.user?.username;
     const username = mention || member;
     return username ? `@${username}` : `@${userId}`;
   });
