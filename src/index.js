@@ -12,7 +12,8 @@ import {
 import { getGroqChatCompletion } from "./groq.js";
 import { commands, setupCommands } from "./commands.js";
 const bot = new Client({
-  urlOverride: config.urlOverride,
+  wsUrlOverride: config.wsUrlOverride,
+  apiUrlOverride: config.apiUrlOverride,
 });
 await setupCommands(bot);
 
