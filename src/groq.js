@@ -8,6 +8,7 @@ const groq = config.groqApiKey ? new Groq({ apiKey: config.groqApiKey }) : {};
 
 export async function getGroqChatCompletion(message) {
   const res = await groq.chat.completions.create({
+    reasoning_format: "hidden",
     messages: [
       {
         role: "system",
@@ -36,6 +37,7 @@ export async function getGroqChatCompletion(message) {
  */
 export async function getGroqChatCompletionFromMessages(messages) {
   const res = await groq.chat.completions.create({
+    reasoning_format: "hidden",
     messages: [
       {
         role: "system",
@@ -44,7 +46,7 @@ export async function getGroqChatCompletionFromMessages(messages) {
       },
       ...messages,
     ],
-    model: "llama-3.3-70b-versatile",
+    model: "qwen/qwen3.6-27b",
   });
 
   const content = res.choices[0]?.message?.content || "";
