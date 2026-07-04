@@ -45,9 +45,10 @@ export const run = async (bot, args, message) => {
     message.channel.server,
   );
 
-  const res = await getGroqChatCompletion(transformedContent).catch((err) =>
-    console.log(err),
-  );
+  const res = await getGroqChatCompletion(
+    transformedContent,
+    message.user.username,
+  ).catch((err) => console.log(err));
 
   if (!res) {
     return message.channel.send("Something went wrong. Check console.");
@@ -92,7 +93,7 @@ export const onMessage = async (bot, message) => {
       return {
         role: messageByAna ? "assistant" : "user",
         ...(!messageByAna ? { name: m.user.username } : {}),
-        content: transformedContent,
+        content: `${m.user.username}: ` + transformedContent,
       };
     })
     .filter((m) => m.content && m.content.trim() !== "")

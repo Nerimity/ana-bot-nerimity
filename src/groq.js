@@ -6,7 +6,7 @@ import config from "./config.js";
  */
 const groq = config.groqApiKey ? new Groq({ apiKey: config.groqApiKey }) : {};
 
-export async function getGroqChatCompletion(message) {
+export async function getGroqChatCompletion(message, username) {
   const res = await groq.chat.completions.create({
     reasoning_format: "hidden",
     messages: [
@@ -17,7 +17,7 @@ export async function getGroqChatCompletion(message) {
       },
       {
         role: "user",
-        content: message,
+        content: `${username}: ` + message,
       },
     ],
     model: "qwen/qwen3.6-27b",
