@@ -48,8 +48,8 @@ const buildPresenceHtml = (presence) => {
           ` : ""}
           <div>
             <span><span class="act">${a.action}</span> ${a.name}</span><br/>
-            ${a.link ? `<a href="${a.link}">${a.title}</a><br/>` : `${a.title}<br/>`}
-            ${a.subtitle}
+           ${a.title ? ` ${a.link ? `<a href="${a.link}">${a.title}</a><br/>` : `${a.title}<br/>`}` : ""}
+            ${a.subtitle ? a.subtitle : ""}
           </div>
 
         </div>        
