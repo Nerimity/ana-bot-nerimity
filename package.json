@@ -12,7 +12,7 @@
   "description": "",
   "dependencies": {
     "@nerimity/html-embed": "^1.2.1",
-    "@nerimity/nerimity.js": "^1.20.1",
+    "@nerimity/nerimity.js": "^1.21.0",
     "@prisma/client": "^5.22.0",
     "@types/node": "^22.20.1",
     "groq-sdk": "^1.4.0",

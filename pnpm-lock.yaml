@@ -12,8 +12,8 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1
       '@nerimity/nerimity.js':
-        specifier: ^1.20.1
-        version: 1.20.1
+        specifier: ^1.21.0
+        version: 1.21.0
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -39,8 +39,8 @@ packages:
   '@nerimity/html-embed@1.2.1':
     resolution: {integrity: sha512-fikq4R4egIlgV06sqjeFcvfg+VrGpqACYYo6IisV271L35RBTZJdheF6PBZaOE3QhaC/GWO3jDc8AQ0aL/Ky6g==}
 
-  '@nerimity/nerimity.js@1.20.1':
-    resolution: {integrity: sha512-F04WhqHgE6G7doyB7CxdA29z4rI2naPp5Zujnz/eP12NUzDIKS1V9UNm++wPnIBjP42tteMRT/2yQ4N8jznRFw==}
+  '@nerimity/nerimity.js@1.21.0':
+    resolution: {integrity: sha512-coGZyobIMaVCoYrALRw2F9DU+d+24ZG4sJq9ri5PO5ngTjOtX0g/GrJMvT27Y7GRfpmvqY1iY/c9yhe2K1Ns7Q==}
 
   '@prisma/client@5.22.0':
     resolution: {integrity: sha512-M0SVXfyHnQREBKxCgyo7sffrKttwE6R8PMq330MIUF0pTwjUhLbW84pFDlf06B27XyCR++VtjugEnIHdr07SVA==}
@@ -335,7 +335,7 @@ snapshots:
       htm: 3.1.1
       htmlparser2: 10.1.0
 
-  '@nerimity/nerimity.js@1.20.1':
+  '@nerimity/nerimity.js@1.21.0':
     dependencies:
       eventemitter3: 5.0.4
       socket.io-client: 4.8.3
