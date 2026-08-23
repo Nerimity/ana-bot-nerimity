@@ -196,7 +196,7 @@ const htmlProfileBuilder = (server, user, profile, raw) => {
         <div class="ctn">
             <div class="h">${escapeHtml(user.username)}<div class="sh">(${profile === "server" ? "Server" : "User"
     } Profile)</div></div>
-            <div class="t">#${user.rank}</div>
+            <div class="t">#${profile === "user" ? user.rank : server.rank}</div>
             <div class="t">Level ${level}</div>
             <div class="t">${currentXP}/${xpRequired}</div>
             <div class="b"><div style="width: ${percent}%"></div></div>
