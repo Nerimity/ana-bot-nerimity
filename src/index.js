@@ -74,29 +74,36 @@ bot.on("messageCreate", async (message) => {
 /**
  * Handles the leaderBoard command by retrieving user information and responding with a leaderboard.
  *
- * @param {import("@nerimity/nerimity.js/build/Client.js").Message} message - The message object containing the user's command.
+ * @param {import("@nerimity/nerimity.js/build/classes/Message.js").Message} message - The message object containing the user's command.
  */
 const leaderBoardCmd = async (message, global = false) => {
   if (global) {
-    const users = await getGlobalLeaderBoard();
+    const users = await getGlobalLeaderBoard(message.user.id);
     message.reply(undefined, {
       htmlEmbed: htmlLeaderBoardBuilder(
         users.map((user) => ({
           username: user.username,
           totalXP: user.totalXp,
+          rank: user.rank,
+          id: user.id
         })),
         "global",
+        message.user.id
       ),
     });
   } else {
-    const servers = await getServerLeaderBoard(message.channel.serverId);
+    const servers = await getServerLeaderBoard(message.channel.serverId, message.user.id);
     message.reply(undefined, {
       htmlEmbed: htmlLeaderBoardBuilder(
         servers.map((server) => ({
           username: server.user.username,
           totalXP: server.totalXp,
+          rank: server.rank,
+          id: server.userId
         })),
         "server",
+        message.user.id
+
       ),
     });
   }
@@ -113,9 +120,9 @@ const profileCmd = async (message, profile) => {
   args = args.filter((a) => a !== "raw");
   const userId = message.mentions[0]?.id || args[1] || message.user.id;
 
-  let user = await getUser(userId);
+  let user = await getUser(userId, true);
 
-  const server = await getServer(message.channel.serverId, userId);
+  const server = await getServer(message.channel.serverId, userId, true);
 
   if (!user) {
     message.reply("User not found.");
@@ -187,9 +194,9 @@ const htmlProfileBuilder = (server, user, profile, raw) => {
 
   return `
         <div class="ctn">
-            <div class="h">${escapeHtml(user.username)}<div class="sh">(${
-              profile === "server" ? "Server" : "User"
-            } Profile)</div></div>
+            <div class="h">${escapeHtml(user.username)}<div class="sh">(${profile === "server" ? "Server" : "User"
+    } Profile)</div></div>
+            <div class="t">#${user.rank}</div>
             <div class="t">Level ${level}</div>
             <div class="t">${currentXP}/${xpRequired}</div>
             <div class="b"><div style="width: ${percent}%"></div></div>
@@ -234,32 +241,33 @@ const htmlProfileBuilder = (server, user, profile, raw) => {
     `;
 };
 /** *
- * @param {{username: string, totalXP: string}[]} users
+ * @param {{username: string, totalXP: string, rank: number, id: string}[]} users
  * @param {"server" | "global"} profile
  * @return {string} The HTML profile.
  */
-const htmlLeaderBoardBuilder = (users, profile) => {
+const htmlLeaderBoardBuilder = (users, profile, userId) => {
   return `
         <div class="ctn">
-            <div class="h">Leader board<div class="sh">(${
-              profile === "server" ? "Server" : "Global"
-            } Profile)</div></div>
+            <div class="h">Leader board<div class="sh">(${profile === "server" ? "Server" : "Global"
+    } Profile)</div></div>
 
             ${users
-              .map(
-                (user) => `
-                    <div>${escapeHtml(user.username)} ${user.totalXP}XP</div>
+      .map(
+        (user) => `
+                    <div ${userId === user.id ? 'class="slf"' : ""}>#${user.rank} ${escapeHtml(user.username)} ${user.totalXP}XP</div>
                 `,
-              )
-              .join("")}
+      )
+      .join("")}
 
         </div>
         <style>
+            .slf {
+              background-color: #313131;
+            }
             .ctn {
                 font-family: monospace;
                 background-color: #000;
                 margin-top: 6px;
-                text-align: center;
                 border-radius: 6px;
                 overflow: hidden;
             }

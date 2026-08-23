@@ -4,44 +4,99 @@ import { PrismaClient } from "@prisma/client";
 const adapter = new PrismaBetterSqlite3({ url: "file:./prisma/db/db.db" });
 const prisma = new PrismaClient({ adapter });
 
-export const getGlobalLeaderBoard = () => {
-  return prisma.user.findMany({
+export const getGlobalLeaderBoard = async (userId) => {
+  const top = await prisma.user.findMany({
     take: 10,
-    orderBy: {
-      totalXp: "desc",
-    },
+    orderBy: { totalXp: "desc" },
   });
+
+  const leaderboard = top.map((u, i) => ({ ...u, rank: i + 1 }));
+
+  const isInTop10 = top.some((u) => u.id === userId);
+
+  if (userId && !isInTop10) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (user) {
+      const higherCount = await prisma.user.count({
+        where: { totalXp: { gt: user.totalXp } },
+      });
+
+      leaderboard.push({ ...user, rank: higherCount + 1 });
+    }
+  }
+
+  return leaderboard;
 };
-export const getServerLeaderBoard = (serverId) => {
-  return prisma.server.findMany({
+
+export const getServerLeaderBoard = async (serverId, userId) => {
+  const top = await prisma.server.findMany({
     take: 10,
-    where: {
-      id: serverId,
-    },
+    where: { id: serverId },
     include: { user: { select: { username: true } } },
-    orderBy: {
-      totalXp: "desc",
-    },
+    orderBy: { totalXp: "desc" },
   });
+
+  const leaderboard = top.map((s, i) => ({ ...s, rank: i + 1 }));
+
+  const isInTop10 = top.some((s) => s.userId === userId);
+
+  if (userId && !isInTop10) {
+    const userServer = await prisma.server.findUnique({
+      where: { id_userId: { id: serverId, userId } },
+      include: { user: { select: { username: true } } },
+    });
+
+    if (userServer) {
+      const higherCount = await prisma.server.count({
+        where: { id: serverId, totalXp: { gt: userServer.totalXp } },
+      });
+
+      leaderboard.push({ ...userServer, rank: higherCount + 1 });
+    }
+  }
+
+  return leaderboard;
 };
 
-export const getServer = async (serverId, userId) => {
-  return prisma.server.findUnique({
+export const getServer = async (serverId, userId, includeRank = false) => {
+  const server = await prisma.server.findUnique({
     where: {
-      id_userId: {
-        userId,
-        id: serverId,
-      },
+      id_userId: { id: serverId, userId },
     },
   });
+
+  if (!server) return null;
+
+  if (includeRank) {
+    const higherCount = await prisma.server.count({
+      where: { id: serverId, totalXp: { gt: server.totalXp } },
+    });
+    server.rank = higherCount + 1;
+  }
+
+  return server;
 };
 
-export const getUser = async (userId) => {
-  return prisma.user.findUnique({
+export const getUser = async (userId, includeRank = false) => {
+  const user = await prisma.user.findUnique({
     where: {
       id: userId,
     },
   });
+
+  if (!user) return null;
+
+  if (includeRank) {
+    const higherCount = await prisma.user.count({
+      where: { totalXp: { gt: user.totalXp } },
+    });
+    user.rank = higherCount + 1;
+  }
+
+  return user;
 };
 
 /**
