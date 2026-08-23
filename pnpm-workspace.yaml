@@ -1,6 +1,7 @@
 allowBuilds:
   '@prisma/client': true
   '@prisma/engines': true
+  better-sqlite3: true
   prisma: true
 minimumReleaseAgeExclude:
   - '@nerimity/nerimity.js@1.21.0'
