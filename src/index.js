@@ -254,15 +254,36 @@ const htmlLeaderBoardBuilder = (users, profile, userId) => {
             ${users
       .map(
         (user) => `
-                    <div ${userId === user.id ? 'class="slf"' : ""}>#${user.rank} ${escapeHtml(user.username)} ${user.totalXP}XP</div>
+                    <div class="usr ${userId === user.id ? 'slf' : ""}">
+                    
+                    
+                    <div class="rnk">#${user.rank}</div>
+                    <div style="flex:1;">${escapeHtml(user.username)}</div>
+                    <div style="color:#ffffffa1;">${user.totalXP} XP</div>
+                    
+                    
+                    
+                    </div>
                 `,
       )
       .join("")}
 
         </div>
         <style>
+            .rnk {
+              width: 24px;
+              color: #ffffff6b;
+            }
+            .usr {
+              display: flex;
+              align-items: center;
+              margin: 0 4px;
+              padding: 0 2px;
+              gap: 6px;
+            }
             .slf {
               background-color: #313131;
+              border-radius: 4px;
             }
             .ctn {
                 font-family: monospace;
