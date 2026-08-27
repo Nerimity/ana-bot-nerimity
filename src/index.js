@@ -271,7 +271,7 @@ const htmlLeaderBoardBuilder = (users, profile, userId) => {
         </div>
         <style>
             .rnk {
-              width: 24px;
+              width: 26px;
               color: #ffffff6b;
             }
             .usr {
