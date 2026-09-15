@@ -20,7 +20,7 @@ export async function getGroqChatCompletion(message, username) {
         content: `${username}: ` + message,
       },
     ],
-    model: "qwen/qwen3.6-27b",
+    model: "qwen/qwen3.8-27b",
   });
 
   const content = res.choices[0]?.message?.content || "";
@@ -46,7 +46,7 @@ export async function getGroqChatCompletionFromMessages(messages) {
       },
       ...messages,
     ],
-    model: "qwen/qwen3.6-27b",
+    model: "qwen/qwen3.8-27b",
   });
 
   const content = res.choices[0]?.message?.content || "";
